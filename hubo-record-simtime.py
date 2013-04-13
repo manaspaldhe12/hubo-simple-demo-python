@@ -75,17 +75,32 @@ if __name__=='__main__':
   print "file: ",f
   print "*** Recording ***"
   timei = 0;
-  while(1):
+  [statusr, framesizer] = r.get(ref, wait=False, last=True)
+  r.put(ref)
+  thold = 0.0
+  firstTime = True
+  stepTime = 1.0
+  stepEnd = 5.0
+  dontBreak = True
+  while(dontBreak):
     # Wait for simtime
     [statusfs, framesizefs] = fs.get(sim,wait=True, last=False)
     # Get the current feed-forward (state) 
     [statuss, framesizes] = s.get(state, wait=False, last=True)
     [statusr, framesizer] = r.get(ref, wait=False, last=True)
 
+    if(firstTime == True):
+      thold = state.time 
+      firstTime = False 
+    if((state.time - thold) >= stepTime):
+      ref.ref[ha.RSP] = 0.4
+      ref.mode[ha.RSP] = 1
+      r.put(ref)
+
 
     # Print out the actual position of the LEB
   #  print "Time = ",state.time, " : WST = ", state.joint[ha.WST].pos
-    data = [ state.time, ref.ref[ha.RSP], state.joint[ha.RSP].ref, state.joint[ha.RSP].pos]
+    data = [ (state.time - thold), ref.ref[ha.RSP], state.joint[ha.RSP].ref, state.joint[ha.RSP].pos]
     if(timei > 100):
       print data
       timei = 0
@@ -93,12 +108,15 @@ if __name__=='__main__':
       timei = timei+1
 
     f.write(str(data)[1:-1]+'\n')
+    if((state.time-thold) > stepEnd):
+      dontBreak = False
+      break
 
     # Write to the feed-forward channel
   #  r.put(ref)
 
   # Close the connection to the channels
-  fs.closne()
+  fs.close()
   r.close()
   s.close()
 
