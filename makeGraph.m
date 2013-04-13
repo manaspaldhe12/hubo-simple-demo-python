@@ -1,6 +1,7 @@
 close all
 clear all
-filename = 'RSP-Zp4-Step.traj';
+%filename = 'RSP-Zp4-Step-Filter.traj';
+filename = 'RSP-Zp4-Step-Step.traj';
 
 m = dlmread(filename, ',');
 T = 0.005;
@@ -29,6 +30,6 @@ plot(t,spos,'b')
 
 legend('Reference','Commanded Reference','Actual Position')
 
-title('Angle of Right Shoulder Pitch')
-xlabel('Time (s)')
-ylabel('Angle (rad)')
+title('Step Response: Angle of Right Shoulder Pitch','FontSize', 25)
+xlabel('Time (s)','FontSize', 15)
+ylabel('Angle (rad)','FontSize', 15)
