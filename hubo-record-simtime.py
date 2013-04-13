@@ -49,6 +49,8 @@ if __name__=='__main__':
   s.flush()
   r.flush()
   fs.flush()
+  RT = False
+
 
   # feed-forward will now be refered to as "state"
   state = ha.HUBO_STATE()
@@ -84,7 +86,8 @@ if __name__=='__main__':
   dontBreak = True
   while(dontBreak):
     # Wait for simtime
-    [statusfs, framesizefs] = fs.get(sim,wait=True, last=False)
+    if(RT==False):
+      [statusfs, framesizefs] = fs.get(sim,wait=True, last=False)
     # Get the current feed-forward (state) 
     [statuss, framesizes] = s.get(state, wait=False, last=True)
     [statusr, framesizer] = r.get(ref, wait=False, last=True)
@@ -94,7 +97,7 @@ if __name__=='__main__':
       firstTime = False 
     if((state.time - thold) >= stepTime):
       ref.ref[ha.RSP] = 0.4
-      ref.mode[ha.RSP] = 0
+      ref.mode[ha.RSP] = 1
       r.put(ref)
 
 
