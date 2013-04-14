@@ -1,15 +1,27 @@
 close all
 clear all
-%filename = 'RSP-Zp4-Step-Filter.traj';
-filename = 'RSP-Zp4-Step-Step.traj';
+filename = 'RSP-Zp4-Step-Filter-Real.traj';
+%filename = 'RSP-Zp4-Step-Step-Real.traj';
 
 m = dlmread(filename, ',');
 T = 0.005;
-sdes=ceil(2.5/T);;
+tend = 2.5;
 
-trange = 1:ceil(sdes);;
+sdes=ceil(2.5/T);
+
+%trange = 1:ceil(sdes);
 
 t = m(:,1);
+finalV = 0;
+for i = 1:length(t)
+    if t(i) > tend
+       finalV = i;
+       break;
+    end
+end
+
+trange = 1:finalV;
+
 t = t - t(1);
 t = t(trange);
 
