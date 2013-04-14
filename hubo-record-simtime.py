@@ -82,7 +82,7 @@ if __name__=='__main__':
   thold = 0.0
   firstTime = True
   stepTime = 1.0
-  stepEnd = 5.0
+  stepEnd = 10
   dontBreak = True
   while(dontBreak):
     # Wait for simtime
