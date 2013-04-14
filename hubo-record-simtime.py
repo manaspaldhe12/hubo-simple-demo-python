@@ -99,7 +99,7 @@ if __name__=='__main__':
       firstTime = False 
     if((state.time - thold) >= stepTime):
       ref.ref[ha.RSP] = 0.4
-      ref.mode[ha.RSP] = 1
+      ref.mode[ha.RSP] = 3
       r.put(ref)
 
 
