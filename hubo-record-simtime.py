@@ -49,7 +49,7 @@ if __name__=='__main__':
   s.flush()
   r.flush()
   fs.flush()
-  RT = False
+  RT = True
 
 
   # feed-forward will now be refered to as "state"
@@ -88,6 +88,8 @@ if __name__=='__main__':
     # Wait for simtime
     if(RT==False):
       [statusfs, framesizefs] = fs.get(sim,wait=True, last=False)
+    else:
+      time.sleep(0.001)
     # Get the current feed-forward (state) 
     [statuss, framesizes] = s.get(state, wait=False, last=True)
     [statusr, framesizer] = r.get(ref, wait=False, last=True)
