@@ -1,11 +1,12 @@
 close all
 clear all
-filename = 'RSP-Zp4-Step-Filter-Real.traj';
+%filename = 'RSP-Zp4-Step-Filter-Real.traj';
+filename = 'RSP-Zp4-Step-Filter-Enc-Real.traj';
 %filename = 'RSP-Zp4-Step-Step-Real.traj';
 
 m = dlmread(filename, ',');
 T = 0.005;
-tend = 2.5;
+tend = 10;
 
 sdes=ceil(2.5/T);
 
@@ -45,3 +46,5 @@ legend('Reference','Commanded Reference','Actual Position')
 title('Step Response: Angle of Right Shoulder Pitch','FontSize', 25)
 xlabel('Time (s)','FontSize', 15)
 ylabel('Angle (rad)','FontSize', 15)
+
+axis([0 tend*1.02 -0.02 0.42])
