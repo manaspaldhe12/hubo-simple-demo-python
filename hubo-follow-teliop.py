@@ -41,27 +41,24 @@ r = ach.Channel(ha.HUBO_CHAN_REF_NAME)
 s.flush()
 r.flush()
 
+
 # feed-forward will now be refered to as "state"
 state = ha.HUBO_STATE()
 
 # feed-back will now be refered to as "ref"
 ref = ha.HUBO_REF()
 
-# Get the current feed-forward (state) 
-[statuss, framesizes] = s.get(state, wait=False, last=False)
 
-#Set Left Elbow Bend (LEB) and Right Shoulder Pitch (RSP) to  -0.2 rad and 0.1 rad respectively
-ref.ref[ha.LEB] = -0.2
-ref.ref[ha.RSP] = 0.1
+while(1):
+  # Get the current feed-forward (state) 
+  [statuss, framesizes] = s.get(state, wait=False, last=False)
 
-# Print out the actual position of the LEB
-print "Joint = ", state.joint[ha.LEB].pos
+  for i in range(0,ha.HUBO_JOINT_COUNT):
+    ref.ref[i] = state.joint[i].pos
 
-# Print out the Left foot torque in X
-print "Mx = ", state.ft[ha.HUBO_FT_L_FOOT].m_x
-
-# Write to the feed-forward channel
-r.put(ref)
+  # Write to the feed-forward channel
+  r.put(ref)
+  time.sleep(0.05)
 
 # Close the connection to the channels
 r.close()
