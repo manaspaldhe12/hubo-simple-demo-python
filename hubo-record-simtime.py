@@ -49,7 +49,7 @@ if __name__=='__main__':
   s.flush()
   r.flush()
   fs.flush()
-  RT = True
+  RT = False
 
 
   # feed-forward will now be refered to as "state"
@@ -99,7 +99,8 @@ if __name__=='__main__':
       firstTime = False 
     if((state.time - thold) >= stepTime):
       ref.ref[ha.RSP] = 0.4
-      ref.mode[ha.RSP] = 3
+      ref.mode[ha.RSP] = 1
+#      ref.mode[ha.RSP] = 3
       r.put(ref)
 
 

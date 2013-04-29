@@ -1,8 +1,10 @@
-close all
-clear all
+%close all
+%clear all
 %filename = 'RSP-Zp4-Step-Filter-Real.traj';
 %filename = 'RSP-Zp4-Step-Filter-Enc-Real.traj';
-filename = 'RSP-Zp4-Step-Step-Real.traj';
+filename = 'RSP-Zp4-Step-NoFilter-NewSim.traj';
+%filename = 'RSP-Zp4-Step-Step-Real.traj';
+%filename = 'RSP-Zp4-Step-Filter-Enc-Mass-Real.traj';
 
 m = dlmread(filename, ',');
 T = 0.005;
@@ -48,7 +50,7 @@ ylabel('Angle (rad)','FontSize', 12)
 
 %title({'Angle of Right Shoulder Pitch';'Step Response with Compliance Amplification'},'FontSize', 17)
 %title({'Angle of Right Shoulder Pitch';'Step Response with Reference Filtering'},'FontSize', 17)
-title({'Angle of Right Shoulder Pitch';'Step Response'},'FontSize', 17)
+title({'Angle of Right Shoulder Pitch';'Step Response - Simulator'},'FontSize', 17)
 axis([0 tend*1.02 -0.02 0.42])
 grid on
 
