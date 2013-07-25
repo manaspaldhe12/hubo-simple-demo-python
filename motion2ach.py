@@ -7,14 +7,18 @@ from numpy import *
 from numpy import linalg
 from time import *
 
-def moveRobot(trajectory_matrix, delay = 0, writeToFile=1):
+def moveRobot(trajectory_matrix, delay = 0.1, sendDataToAch = 1):
     #print trajectory_matrix
     # The joint array
+    default_trajectory=matrix(zeros((100,27)))
+    for row_iterator in range(0,100):
+        default_trajectory[row_iterator,23]=-(float)(row_iterator)/100
+    trajectory_matrix=default_trajectory
     joint_array=["WST","LHY", "LHR", "LHP", "LKN", "LAP", "LAR", "RHY", "RHR", "RHP", "RKN", "RAP", "RAR", "LSP", "LSR", "LSY", "LEB", "LWY", "LWP", "LWR", "RSP", "RSR", "RSY", "REB", "RWY", "RWP", "RWR"];
     
     no_of_rows=trajectory_matrix.shape[0]
     no_of_columns=trajectory_matrix.shape[1]
-    converted_trajectory_matrix=convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, writeToFile)
+    converted_trajectory_matrix=convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, writeToFile=1)
 
     if (no_of_columns != 27):
         print "error: number of coluumns are not 27:  " + str(no_of_columns)+" columns found"
@@ -39,13 +43,16 @@ def moveRobot(trajectory_matrix, delay = 0, writeToFile=1):
             ref.ref[joint]=converted_trajectory_matrix[trajectory_iterator,joint]
     
         # Write to the feed-forward channel
-        r.put(ref)
+	if (sendDataToAch==1):
+	        r.put(ref)
         sleep(delay)
     # Close the connection to the channels
     r.close()
     s.close()
 
     return 0
+    
+    
 def jointMap (jointname, joint_array):
     for i in range(0,size(joint_array)):
         if (joint_array[i]==jointname):
@@ -118,6 +125,17 @@ def getJointName(joint):
     elif (joint==31):
         return "RAR"
 
+def motion2file(in_matrix):
+     file_matrix = open('trajectoryGenerated.traj', 'w')
+     no_of_rows=in_matrix.shape[0]
+     no_of_columns=in_matrix.shape[1]
+     for row_iterator in range(0, no_of_rows):
+          row_to_be_written=""
+          for column_iterator in range(0, no_of_columns):
+               row_to_be_written=row_to_be_written + str(in_matrix[row_iterator, column_iterator])+", "
+          row_to_be_written=row_to_be_written+"\n"
+          file_matrix.write(row_to_be_written)
+
 def convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, writeToFile):
     no_of_columns=32
     converted_matrix=matrix([[0.0 for col in range(no_of_columns)] for row in range(no_of_rows)])
@@ -125,13 +143,15 @@ def convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, 
         jointname=getJointName(joint)
         joint_in_our_array=jointMap(jointname, joint_array)
         for trajectory_setpoint in range(0,no_of_rows):
-            if (joint_in_our_array==14):
+            if (joint_in_our_array==23):
                 converted_matrix[trajectory_setpoint,joint]=trajectory_matrix[trajectory_setpoint,joint_in_our_array]
             else:
-                converted_matrix[trajectory_setpoint, joint]=0
-    generatedTrajectory= open('generatedTrajectory.traj', 'w')
-    generatedTrajectory.write(str(converted_matrix))
+                converted_matrix[trajectory_setpoint, joint]=0.0
+    motion2file(converted_matrix)
     return converted_matrix
-            
-        
+   
 
+
+
+
+     
