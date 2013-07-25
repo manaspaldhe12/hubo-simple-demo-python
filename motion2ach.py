@@ -151,6 +151,17 @@ def convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, 
     return converted_matrix
    
 
+def checkMotionSteps(trajectory_matrix):
+	no_of_rows=trajectory_matrix.shape[0]
+	no_of_columns=trajectory_matrix.shape[1]
+	jump_threshold=0.03
+	for column in range (0, no_of_columns):
+		last_value=0;
+		for row in range (0, number_of_rows):
+			if (abs(trajectory_matrix[row,column]-last_value)>jump_threshold):
+				print str(row)+" th row,  "+str(column)+"  th column  has jump more than threshold"
+			last_value=trajectory_matrix[row, column] 
+
 
 
 
