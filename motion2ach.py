@@ -1,5 +1,5 @@
 import hubo_ach as hubo
-import ach
+#import ach
 import sys
 import time
 from ctypes import *
@@ -157,7 +157,7 @@ def checkMotionSteps(trajectory_matrix):
 	jump_threshold=0.03
 	for column in range (0, no_of_columns):
 		last_value=0;
-		for row in range (0, number_of_rows):
+		for row in range (0, no_of_rows):
 			if (abs(trajectory_matrix[row,column]-last_value)>jump_threshold):
 				print str(row)+" th row,  "+str(column)+"  th column  has jump more than threshold"
 			last_value=trajectory_matrix[row, column] 
