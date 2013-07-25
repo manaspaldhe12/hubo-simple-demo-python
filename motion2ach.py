@@ -8,7 +8,7 @@ from numpy import linalg
 from time import *
 
 def moveRobot(trajectory_matrix, delay = 0.1, sendDataToAch = 1):
-    #print trajectory_matrix
+    print "starting motion"
     # The joint array
     default_trajectory=matrix(zeros((100,27)))
     for row_iterator in range(0,100):
@@ -19,6 +19,7 @@ def moveRobot(trajectory_matrix, delay = 0.1, sendDataToAch = 1):
     no_of_rows=trajectory_matrix.shape[0]
     no_of_columns=trajectory_matrix.shape[1]
     converted_trajectory_matrix=convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, writeToFile=1)
+    checkMotionSteps(converted_trajectory_matrix)
 
     if (no_of_columns != 27):
         print "error: number of coluumns are not 27:  " + str(no_of_columns)+" columns found"
