@@ -10,10 +10,10 @@ from time import *
 def moveRobot(trajectory_matrix, delay = 0.1, sendDataToAch = 1):
     print "starting motion"
     # The joint array
-    default_trajectory=matrix(zeros((100,27)))
-    for row_iterator in range(0,100):
-        default_trajectory[row_iterator,23]=-(float)(row_iterator)/100
-    trajectory_matrix=default_trajectory
+    #default_trajectory=matrix(zeros((100,27)))
+    #for row_iterator in range(0,100):
+    #    default_trajectory[row_iterator,23]=-(float)(row_iterator)/100
+    #trajectory_matrix=default_trajectory
     joint_array=["WST","LHY", "LHR", "LHP", "LKN", "LAP", "LAR", "RHY", "RHR", "RHP", "RKN", "RAP", "RAR", "LSP", "LSR", "LSY", "LEB", "LWY", "LWP", "LWR", "RSP", "RSR", "RSY", "REB", "RWY", "RWP", "RWR"];
     
     no_of_rows=trajectory_matrix.shape[0]
@@ -144,7 +144,7 @@ def convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, 
         jointname=getJointName(joint)
         joint_in_our_array=jointMap(jointname, joint_array)
         for trajectory_setpoint in range(0,no_of_rows):
-            if (joint_in_our_array==23):
+            if (joint_in_our_array<=0):
                 converted_matrix[trajectory_setpoint,joint]=trajectory_matrix[trajectory_setpoint,joint_in_our_array]
             else:
                 converted_matrix[trajectory_setpoint, joint]=0.0
