@@ -10,11 +10,17 @@ from time import *
 def moveRobot(trajectory_matrix, delay = 0, sendDataToAch=1, compliance_mode=1):
     #print trajectory_matrix
     # The joint array
+    default_trajectory=matrix(zeros((100,27)))
+    for row_iterator in range(0,100):
+        default_trajectory[row_iterator,23]=-(float)(row_iterator)/200
+    trajectory_matrix=default_trajectory
     joint_array=["WST","LHY", "LHR", "LHP", "LKN", "LAP", "LAR", "RHY", "RHR", "RHP", "RKN", "RAP", "RAR", "LSP", "LSR", "LSY", "LEB", "LWY", "LWP", "LWR", "RSP", "RSR", "RSY", "REB", "RWY", "RWP", "RWR"];
     
     no_of_rows=trajectory_matrix.shape[0]
     no_of_columns=trajectory_matrix.shape[1]
     converted_trajectory_matrix=convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, writeToFile=1)
+    if (checkMotionSteps(converted_trajectory_matrix)==False):
+          sendDataToAch=0;
 
     if (no_of_columns != 27):
         print "error: number of coluumns are not 27:  " + str(no_of_columns)+" columns found"
@@ -148,6 +154,20 @@ if __name__ == "__main__":
      for row_iterator in range(0,100):
           default_trajectory[row,23]=-row_iterator/100
           sleep(0.1)
+
+def checkMotionSteps(trajectory_matrix):
+	no_of_rows=trajectory_matrix.shape[0]
+	no_of_columns=trajectory_matrix.shape[1]
+	jump_threshold=0.03
+	is_fine =True
+	for column in range (0, no_of_columns):
+		last_value=0;
+		for row in range (0, no_of_rows):
+			if (abs(trajectory_matrix[row,column]-last_value)>jump_threshold):
+				print str(row)+" th row,  "+str(column)+"  th column  has jump more than threshold"
+				is_fine=False
+			last_value=trajectory_matrix[row, column] 
+	return is_fine;
 
 
 
