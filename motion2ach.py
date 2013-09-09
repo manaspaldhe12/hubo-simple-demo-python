@@ -148,12 +148,7 @@ def convertToHuboAch(trajectory_matrix, no_of_rows, no_of_columns, joint_array, 
                 converted_matrix[trajectory_setpoint, joint]=0
     writeToFile(converted_matrix)
     return converted_matrix
-   
-if __name__ == "__main__":
-     default_trajectory=matrix([[0.0 for col in range(27)] for row in range(100)])
-     for row_iterator in range(0,100):
-          default_trajectory[row,23]=-row_iterator/100
-          sleep(0.1)
+
 
 def checkMotionSteps(trajectory_matrix):
 	no_of_rows=trajectory_matrix.shape[0]
@@ -170,5 +165,62 @@ def checkMotionSteps(trajectory_matrix):
 	return is_fine;
 
 
+def getForces():
+    s = ach.Channel(hubo.HUBO_CHAN_STATE_NAME)
+    s.flush()
 
-     
+    state = hubo.HUBO_STATE()
+
+    [statuss, framesizes] = s.get(state, wait=False, last=False)
+    
+    forces=[0,0,0,0,0,0,0,0,0,0,0,0];
+    forces[0]=state.ft[hubo.HUBO_FT_L_HAND].m_x
+    forces[1]=state.ft[hubo.HUBO_FT_L_HAND].m_y
+    forces[2]=state.ft[hubo.HUBO_FT_L_HAND].f_z
+
+    forces[3]=state.ft[hubo.HUBO_FT_R_HAND].m_x
+    forces[4]=state.ft[hubo.HUBO_FT_R_HAND].m_y
+    forces[5]=state.ft[hubo.HUBO_FT_R_HAND].f_z
+ 
+    forces[6]=state.ft[hubo.HUBO_FT_L_FOOT].m_x
+    forces[7]=state.ft[hubo.HUBO_FT_L_FOOT].m_y
+    forces[8]=state.ft[hubo.HUBO_FT_L_FOOT].f_z
+ 
+    forces[9]=state.ft[hubo.HUBO_FT_R_FOOT].m_x
+    forces[10]=state.ft[hubo.HUBO_FT_R_FOOT].m_y
+    forces[11]=state.ft[hubo.HUBO_FT_R_FOOT].f_z
+          
+    s.close()
+
+    return forces
+
+
+def getEncoders():
+	
+    s = ach.Channel(hubo.HUBO_CHAN_STATE_NAME)
+    s.flush()
+
+    state = hubo.HUBO_STATE()
+
+    [statuss, framesizes] = s.get(state, wait=False, last=False)
+    
+    encoders= [0.0]*28  #(0.0 for i in range(0,27))   
+
+    for i in range (0,27):
+	encoders[i]=state.joint[i].pos    
+
+    s.close()
+
+    return encoders
+  
+if __name__ == "__main__":
+     default_trajectory=matrix([[0.0 for col in range(27)] for row in range(100)])
+     f=getForces();
+     e=getEncoders();
+     print f
+     print e
+     for row_iterator in range(0,100):
+          default_trajectory[row,23]=-row_iterator/100
+          sleep(0.1)
+
+
