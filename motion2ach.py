@@ -6,6 +6,7 @@ from ctypes import *
 from numpy import *
 from numpy import linalg
 from time import *
+import datetime
 
 def moveRobot(trajectory_matrix, delay = 0, sendDataToAch=1, compliance_mode=1):
     #print trajectory_matrix
@@ -189,10 +190,11 @@ def getForces():
     forces[9]=state.ft[hubo.HUBO_FT_R_FOOT].m_x
     forces[10]=state.ft[hubo.HUBO_FT_R_FOOT].m_y
     forces[11]=state.ft[hubo.HUBO_FT_R_FOOT].f_z
-          
+         
+    t=str(datetime.datetime.now())
     s.close()
 
-    return forces
+    return [forces, t]
 
 
 def getEncoders():
@@ -209,9 +211,10 @@ def getEncoders():
     for i in range (0,27):
 	encoders[i]=state.joint[i].pos    
 
+    t=str(datetime.datetime.now())
     s.close()
 
-    return encoders
+    return [encoders,t]
   
 if __name__ == "__main__":
      default_trajectory=matrix([[0.0 for col in range(27)] for row in range(100)])
