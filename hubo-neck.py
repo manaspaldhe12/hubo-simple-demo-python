@@ -42,6 +42,9 @@ s.flush()
 state = hubo.HUBO_STATE()
 ref = hubo.HUBO_REF()
 
+NK1_value=0
+NKY_value=0
+
 [statuss, framesizes] = s.get(state, wait=False, last=False)
 
 cont= True;
@@ -50,23 +53,27 @@ while (cont):
 	print(str(motion) + ": is executing") 
 
 	if (motion=='w'):
-		ref.ref[hubo.NK1] = state.joint[hubo.NK1].pos - 0.05
+		NK1_value =NK1_value-0.3
+		ref.ref[hubo.NK1] = NK1_value 
 	elif (motion=='s'):
-		ref.ref[hubo.NK1] = state.joint[hubo.NK1].pos + 0.05
-	elif (motion=='a'):
-		ref.ref[hubo.NKY] = state.joint[hubo.NKY].pos - 0.05
+		NK1_value= NK1_value+0.3
+		ref.ref[hubo.NK1] = NK1_value#+ 0.1
 	elif (motion=='d'):
-		ref.ref[hubo.NKY] = state.joint[hubo.NKY].pos + 0.05
+		NKY_value=NKY_value-0.3
+		ref.ref[hubo.NKY] = NKY_value# - 0.1
+	elif (motion=='a'):
+		NKY_value=NKY_value+0.3
+		ref.ref[hubo.NKY] = NKY_value#state.joint[hubo.NKY].pos + 0.1
 	elif (motion=='exit'):
 		cont=False;
 	else:
 		print "weird input";
 
-	print "Joint NKY = ", state.joint[hubo.NKY].pos
-	print "Joint NK1 = ", state.joint[hubo.NK1].pos
+	#print "Joint NKY = ", state.joint[hubo.NKY].pos
+	#print "Joint NK1 = ", state.joint[hubo.NK1].pos
 
-# Write to the feed-forward channel
-n.put(ref)
+	# Write to the feed-forward channel
+	n.put(ref)
 
 # Close the connection to the channels
 n.close()
