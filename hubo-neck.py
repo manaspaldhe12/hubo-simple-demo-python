@@ -77,13 +77,13 @@ while (cont):
 			ref.ref[hubo.NKY]=NKY_value
 	elif (motion[0]=='d'):
 		i=0
-		while (i<str(motion[1:)):
+		while (i<int(str(motion[1:))):
 			NKY_value=NKY_value-0.3
 			ref.ref[hubo.NKY]=NKY_value
 			i=i+1
 	elif (motion[0]=='a'):
 		i=0
-		while (i<str(motion[1:)):
+		while (i<int(str(motion[1:))):
 			NKY_value=NKY_value+0.3
 			ref.ref[hubo.NKY]=NKY_value	
 			i=i+1
