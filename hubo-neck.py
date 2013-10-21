@@ -45,8 +45,8 @@ ref = hubo.HUBO_REF()
 NK1_value=0
 NKY_value=0
 
-NKY_right_limit=-1.5/2
-NKY_left_limit=1.5/2
+NKY_right_limit=-0.9
+NKY_left_limit=0.9
 
 [statuss, framesizes] = s.get(state, wait=False, last=False)
 
@@ -77,13 +77,13 @@ while (cont):
 			ref.ref[hubo.NKY]=NKY_value
 	elif (motion[0]=='d'):
 		i=0
-		while (i<int(str(motion[1:))):
+		while (i<int(str(motion[1:]))):
 			NKY_value=NKY_value-0.3
 			ref.ref[hubo.NKY]=NKY_value
 			i=i+1
 	elif (motion[0]=='a'):
 		i=0
-		while (i<int(str(motion[1:))):
+		while (i<int(str(motion[1:]))):
 			NKY_value=NKY_value+0.3
 			ref.ref[hubo.NKY]=NKY_value	
 			i=i+1
