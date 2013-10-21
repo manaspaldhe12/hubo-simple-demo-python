@@ -1,5 +1,4 @@
-sudo python hubo-neck.py
-r
-l
-a
-d
+sudo python hubo-neck-as-func.py l
+sudo python hubo-neck-as-func.py r
+sudo python hubo-neck-as-func.py l
+sudo python hubo-neck-as-func.py r
